@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/06 12:57:37 by thomasgerma       #+#    #+#             */
-/*   Updated: 2020/06/08 17:32:50 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/11 14:30:40 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ typedef struct			s_philo
 {
 	int					id;
 	long unsigned int	death_time;
+	int					*is_running;
 	pthread_mutex_t		*speaking;
 	pthread_t			thread;
 	t_fork				*right_fork;
@@ -52,6 +53,8 @@ void					parse_setting(t_setting *setting, int ac, char **arg);
 void					initiate(t_setting *setting);
 void					*start_routine(void *philo);
 long unsigned int		get_current_time(void);
+void					*monitoring_thread(void *arg);
+void					clean_mutex_thread(t_philo *philos);
 
 /* utiles function */
 char					*ft_itoa(int num);

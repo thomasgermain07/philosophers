@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/06/06 16:22:16 by thomasgerma       #+#    #+#             */
-/*   Updated: 2020/06/08 17:22:31 by thgermai         ###   ########.fr       */
+/*   Created: 2020/06/10 12:36:23 by thgermai          #+#    #+#             */
+/*   Updated: 2020/06/11 14:40:37 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 /* temporaray lib */
 #include <stdio.h>
 
-void			initiate_forks(int num, t_fork *forks)
+void		initiate_forks(int num, t_fork *forks)
 {
 	int			i;
 
@@ -26,7 +26,7 @@ void			initiate_forks(int num, t_fork *forks)
 	}
 }
 
-void			initiate_philos(t_setting *setting, t_philo *philos, t_fork *forks)
+void		initiate_philos(t_setting *setting, t_philo *philos, t_fork *forks)
 {
 	int				i;
 	pthread_mutex_t speaking;
@@ -36,32 +36,42 @@ void			initiate_philos(t_setting *setting, t_philo *philos, t_fork *forks)
 	while (++i < setting->num_of_philo)
 	{
 		if (i == 0)
-		{
 			philos->left_fork = forks + (setting->num_of_philo - 1);
-			philos->right_fork = forks;
-		}
 		else
-		{
 			(philos + i)->left_fork = forks + (i - 1);
-			(philos + i)->right_fork = forks + i;
-		}
+		(philos + i)->right_fork = forks + i;
 		(philos + i)->id = i + 1;
 		(philos + i)->speaking = &speaking;
 		(philos + i)->setting = setting;
+		(philos + i)->death_time = get_current_time() + setting->time_to_die;
 		pthread_create(&(philos + i)->thread, NULL, start_routine, philos + i);
 	}
 }
 
-void			initiate(t_setting *setting)
+void		clean_mutex_thread(t_philo *philos)
+{
+	int		i;
+
+	i = -1;
+	while (++i < philos->setting->num_of_philo)
+		pthread_mutex_destroy(&(philos + i)->right_fork->mutex);
+	pthread_mutex_destroy(philos->speaking);
+}
+
+void		initiate(t_setting *setting)
 {
 	t_fork			forks[setting->num_of_philo];
 	t_philo			philos[setting->num_of_philo];
+	pthread_t		monitoring;
 
 	initiate_forks(setting->num_of_philo, forks);
 	initiate_philos(setting, philos, forks);
+	pthread_create(&monitoring, NULL, monitoring_thread, philos);
+	pthread_join(monitoring, NULL);
+	// clean_mutex_thread(philos);
 }
 
-void			parse_setting(t_setting *setting, int ac, char **arg)
+void		parse_setting(t_setting *setting, int ac, char **arg)
 {
 	setting->num_of_philo = ft_atoi(arg[1]);
 	setting->time_to_die = ft_atoi(arg[2]);
