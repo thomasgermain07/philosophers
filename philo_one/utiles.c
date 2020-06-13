@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/06 13:07:08 by thomasgerma       #+#    #+#             */
-/*   Updated: 2020/06/06 22:28:58 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/13 10:41:08 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,20 +121,4 @@ char * ft_itoa(int n)
 		str[1] = '\0';
 	}
 	return (str);
-}
-
-void	*ft_memccpy(void *dst, const void *src, int c, size_t n)
-{
-	size_t i;
-
-	i = 0;
-	while (i < n)
-	{
-		(*((unsigned char *)dst)) = ((unsigned char *)src)[i];
-		dst++;
-		if (((unsigned char *)src)[i] == (unsigned char)c)
-			return (dst);
-		i++;
-	}
-	return (NULL);
 }

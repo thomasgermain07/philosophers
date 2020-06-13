@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/10 12:36:23 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/11 14:40:37 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/13 14:31:10 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ void		initiate_forks(int num, t_fork *forks)
 	{
 		(forks + i)->id = i;
 		pthread_mutex_init(&(forks + i)->mutex, NULL);
+		// pthread_mutex_unlock(&(forks + i)->mutex);
 	}
 }
 
@@ -32,6 +33,7 @@ void		initiate_philos(t_setting *setting, t_philo *philos, t_fork *forks)
 	pthread_mutex_t speaking;
 
 	pthread_mutex_init(&speaking, NULL);
+	// pthread_mutex_unlock(&speaking);
 	i = -1;
 	while (++i < setting->num_of_philo)
 	{
@@ -45,6 +47,7 @@ void		initiate_philos(t_setting *setting, t_philo *philos, t_fork *forks)
 		(philos + i)->setting = setting;
 		(philos + i)->death_time = get_current_time() + setting->time_to_die;
 		pthread_create(&(philos + i)->thread, NULL, start_routine, philos + i);
+		usleep(philos->setting->time_to_eat * 1000);
 	}
 }
 
@@ -53,22 +56,19 @@ void		clean_mutex_thread(t_philo *philos)
 	int		i;
 
 	i = -1;
+	pthread_mutex_destroy(philos->speaking);
 	while (++i < philos->setting->num_of_philo)
 		pthread_mutex_destroy(&(philos + i)->right_fork->mutex);
-	pthread_mutex_destroy(philos->speaking);
 }
 
-void		initiate(t_setting *setting)
+void		initiate(t_setting *setting, pthread_t *monitoring)
 {
 	t_fork			forks[setting->num_of_philo];
 	t_philo			philos[setting->num_of_philo];
-	pthread_t		monitoring;
 
 	initiate_forks(setting->num_of_philo, forks);
 	initiate_philos(setting, philos, forks);
-	pthread_create(&monitoring, NULL, monitoring_thread, philos);
-	pthread_join(monitoring, NULL);
-	// clean_mutex_thread(philos);
+	pthread_create(monitoring, NULL, monitoring_thread, philos);
 }
 
 void		parse_setting(t_setting *setting, int ac, char **arg)

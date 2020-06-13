@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/06 12:57:37 by thomasgerma       #+#    #+#             */
-/*   Updated: 2020/06/11 14:30:40 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/13 14:31:06 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,10 @@
 # include <sys/time.h>
 
 # define WRONG_SETTINGS "Missing arguments\n"
+# define EAT "is eating"
+# define SLEEP "is sleeping"
+# define THINK "is thinking"
+# define FORK "has taken a fork"
 
 typedef struct			s_setting
 {
@@ -48,15 +52,15 @@ typedef struct			s_philo
 	t_setting			*setting;
 }						t_philo;
 
-/* main function */
+/* main functions */
 void					parse_setting(t_setting *setting, int ac, char **arg);
-void					initiate(t_setting *setting);
-void					*start_routine(void *philo);
+void					initiate(t_setting *setting, pthread_t *monitoring);
+void					*start_routine(void *arg);
 long unsigned int		get_current_time(void);
 void					*monitoring_thread(void *arg);
 void					clean_mutex_thread(t_philo *philos);
 
-/* utiles function */
+/* utiles functions */
 char					*ft_itoa(int num);
 char					*ft_strjoin(char const *s1, char const *s2, int option);
 void					*ft_memccpy(void *dst, const void *src, int c, size_t n);
