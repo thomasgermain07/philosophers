@@ -6,13 +6,29 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/06 13:07:08 by thomasgerma       #+#    #+#             */
-/*   Updated: 2020/06/13 10:41:08 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/15 15:10:42 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+#include <stdio.h>
 
-int		ft_atoi(const char *str)
+long unsigned int	get_current_time(void)
+{
+	struct timeval		t1;
+
+	gettimeofday(&t1, NULL);
+	return ((t1.tv_sec * 1000) + (t1.tv_usec / 1000));
+}
+
+void				display(pthread_mutex_t *speaking, int id, char *status)
+{
+	pthread_mutex_lock(speaking);
+	printf("%lu %d %s\n", get_current_time(), id, status);
+	pthread_mutex_unlock(speaking);
+}
+
+int					ft_atoi(const char *str)
 {
 	int		i;
 	int		neg;
@@ -36,89 +52,4 @@ int		ft_atoi(const char *str)
 		i++;
 	}
 	return (total * neg);
-}
-
-size_t			ft_strlen(const char *str)
-{
-	int			i;
-
-	i = 0;
-	while (str[i])
-		i++;
-	return (i);
-}
-
-size_t		ft_strlcpy(char *dst, const char *src, size_t dstsize)
-{
-	size_t	i;
-	size_t	locate;
-
-	i = 0;
-	locate = 0;
-	if (!dst || !src)
-		return (0);
-	while (src[i])
-	{
-		if (i < dstsize)
-		{
-			dst[i] = src[i];
-			locate = i + 1;
-		}
-		i++;
-	}
-	if (i >= dstsize)
-		locate = dstsize - 1;
-	if (dstsize != 0)
-		dst[locate] = '\0';
-	return (i);
-}
-
-char			*ft_strjoin(char const *s1, char const *s2, int option)
-{
-	size_t	s1len;
-	size_t	s2len;
-	char	*str;
-
-	if (!s1 || !s2)
-		return (NULL);
-	s1len = 0;
-	if (s1)
-		s1len = ft_strlen(s1);
-	s2len = ft_strlen(s2);
-	if (!(str = malloc(sizeof(char) * (s1len + s2len + 1))))
-		return (NULL);
-	if (s1)
-		ft_strlcpy(str, s1, s1len + 1);
-	ft_strlcpy(str + s1len, s2, s2len + 1);
-	if (option == 1 || option == 3)
-		free((char *)s1);
-	if (option == 2 || option == 3)
-		free((char *)s2);
-	str[s1len + s2len] = '\0';
-	return (str);
-}
-
-char * ft_itoa(int n)
-{
-	char *str;
-
-	if (!(str = (char *)malloc(sizeof(char) * 2)))
-		return (NULL);
-	if (n < 0)
-	{
-		str[0] = '-';
-		str[1] = '\0';
-		str = ft_strjoin(str, ft_itoa(-n), 3);
-	}
-	else if (n >= 10)
-	{
-		free(str);
-		str = ft_strjoin(ft_itoa(n / 10), ft_itoa(n % 10), 3);
-	}
-	else if (n < 10 && n >= 0)
-	{
-		str[0] = n + 48;
-		str[1] = '\0';
-	}
-	return (str);
 }

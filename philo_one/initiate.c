@@ -6,34 +6,20 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/10 12:36:23 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/13 14:31:10 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/15 15:09:29 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-/* temporaray lib */
-#include <stdio.h>
+#include <stdio.h> // a del
 
-void		initiate_forks(int num, t_fork *forks)
+static void		initiate_philos(t_setting *setting,
+	t_philo *philos, pthread_mutex_t *forks)
 {
-	int			i;
-
-	i = -1;
-	while (++i < num)
-	{
-		(forks + i)->id = i;
-		pthread_mutex_init(&(forks + i)->mutex, NULL);
-		// pthread_mutex_unlock(&(forks + i)->mutex);
-	}
-}
-
-void		initiate_philos(t_setting *setting, t_philo *philos, t_fork *forks)
-{
-	int				i;
-	pthread_mutex_t speaking;
+	int						i;
+	static pthread_mutex_t	speaking;
 
 	pthread_mutex_init(&speaking, NULL);
-	// pthread_mutex_unlock(&speaking);
 	i = -1;
 	while (++i < setting->num_of_philo)
 	{
@@ -45,33 +31,50 @@ void		initiate_philos(t_setting *setting, t_philo *philos, t_fork *forks)
 		(philos + i)->id = i + 1;
 		(philos + i)->speaking = &speaking;
 		(philos + i)->setting = setting;
+		(philos + i)->n_eat = 0;
 		(philos + i)->death_time = get_current_time() + setting->time_to_die;
 		pthread_create(&(philos + i)->thread, NULL, start_routine, philos + i);
-		usleep(philos->setting->time_to_eat * 1000);
+		usleep(philos->setting->time_to_eat * 100);
 	}
 }
 
-void		clean_mutex_thread(t_philo *philos)
+static void		clean_mutex_thread(t_philo *philos)
 {
 	int		i;
 
 	i = -1;
 	pthread_mutex_destroy(philos->speaking);
 	while (++i < philos->setting->num_of_philo)
-		pthread_mutex_destroy(&(philos + i)->right_fork->mutex);
+		pthread_mutex_destroy((philos + i)->right_fork);
 }
 
-void		initiate(t_setting *setting, pthread_t *monitoring)
+void		initiate(t_setting *setting)
 {
-	t_fork			forks[setting->num_of_philo];
+	pthread_mutex_t	forks[setting->num_of_philo];
 	t_philo			philos[setting->num_of_philo];
+	int				i;
 
-	initiate_forks(setting->num_of_philo, forks);
+	i = -1;
+	while (++i < setting->num_of_philo)
+		pthread_mutex_init(&forks[i], NULL);
 	initiate_philos(setting, philos, forks);
-	pthread_create(monitoring, NULL, monitoring_thread, philos);
+	wait_philo_died(philos);
+	clean_mutex_thread(philos);
 }
 
-void		parse_setting(t_setting *setting, int ac, char **arg)
+static int		check_param(t_setting *setting, int ac)
+{
+	if (setting->num_of_philo <= 0)
+		return (1);
+	if (setting->time_to_die < 0 || setting->time_to_eat < 0 ||
+		setting->time_to_sleep < 0)
+		return (1);
+	if (ac == 6 && setting->number_of_time_to_eat < 0)
+		return (1);
+	return (0);
+}
+
+int				parse_setting(t_setting *setting, int ac, char **arg)
 {
 	setting->num_of_philo = ft_atoi(arg[1]);
 	setting->time_to_die = ft_atoi(arg[2]);
@@ -81,4 +84,10 @@ void		parse_setting(t_setting *setting, int ac, char **arg)
 		setting->number_of_time_to_eat = ft_atoi(arg[5]);
 	else
 		setting->number_of_time_to_eat = -1;
+	if (check_param(setting, ac))
+	{
+		printf("Error: wrong parameters\n");
+		return (-1);
+	}
+	return (0);
 }

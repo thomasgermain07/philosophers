@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/06 12:57:37 by thomasgerma       #+#    #+#             */
-/*   Updated: 2020/06/13 14:31:06 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/06/15 15:11:24 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,36 +34,33 @@ typedef struct			s_setting
 	int					number_of_time_to_eat;
 }						t_setting;
 
-typedef struct 			s_fork
-{
-	unsigned int		id;
-	pthread_mutex_t		mutex;
-}						t_fork;
-
 typedef struct			s_philo
 {
 	int					id;
 	long unsigned int	death_time;
-	int					*is_running;
-	pthread_mutex_t		*speaking;
+	int					n_eat;
 	pthread_t			thread;
-	t_fork				*right_fork;
-	t_fork				*left_fork;
+	pthread_mutex_t		*speaking;
+	pthread_mutex_t		*left_fork;
+	pthread_mutex_t		*right_fork;
 	t_setting			*setting;
 }						t_philo;
 
-/* main functions */
-void					parse_setting(t_setting *setting, int ac, char **arg);
-void					initiate(t_setting *setting, pthread_t *monitoring);
+/*
+** Main Functions
+*/
+int						parse_setting(t_setting *setting, int ac, char **arg);
+void					initiate(t_setting *setting);
 void					*start_routine(void *arg);
 long unsigned int		get_current_time(void);
-void					*monitoring_thread(void *arg);
-void					clean_mutex_thread(t_philo *philos);
+void					wait_philo_died(void *arg);
 
-/* utiles functions */
-char					*ft_itoa(int num);
-char					*ft_strjoin(char const *s1, char const *s2, int option);
-void					*ft_memccpy(void *dst, const void *src, int c, size_t n);
+/*
+** Utiles Functions
+*/
 int						ft_atoi(const char *str);
+void					display(pthread_mutex_t *speaking,
+	int id, char *status);
+long unsigned int		get_current_time(void);
 
-# endif
+#endif
