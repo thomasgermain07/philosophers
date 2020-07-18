@@ -6,11 +6,11 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/10 12:36:23 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/15 15:09:29 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/07/17 14:26:52 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../philo.h"
 #include <stdio.h> // a del
 
 static void		initiate_philos(t_setting *setting,
@@ -65,13 +65,13 @@ void		initiate(t_setting *setting)
 static int		check_param(t_setting *setting, int ac)
 {
 	if (setting->num_of_philo <= 0)
-		return (1);
+		return (EXIT_FAILURE);
 	if (setting->time_to_die < 0 || setting->time_to_eat < 0 ||
 		setting->time_to_sleep < 0)
-		return (1);
+		return (EXIT_FAILURE);
 	if (ac == 6 && setting->number_of_time_to_eat < 0)
-		return (1);
-	return (0);
+		return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
 }
 
 int				parse_setting(t_setting *setting, int ac, char **arg)
@@ -86,8 +86,8 @@ int				parse_setting(t_setting *setting, int ac, char **arg)
 		setting->number_of_time_to_eat = -1;
 	if (check_param(setting, ac))
 	{
-		printf("Error: wrong parameters\n");
-		return (-1);
+		write(2, WRONG_ARGS, sizeof(WRONG_ARGS));
+		return (EXIT_FAILURE);
 	}
-	return (0);
+	return (EXIT_SUCCESS);
 }

@@ -6,11 +6,11 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/06 13:07:08 by thomasgerma       #+#    #+#             */
-/*   Updated: 2020/06/15 15:10:42 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/07/17 14:29:28 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../philo.h"
 #include <stdio.h>
 
 long unsigned int	get_current_time(void)
@@ -21,14 +21,20 @@ long unsigned int	get_current_time(void)
 	return ((t1.tv_sec * 1000) + (t1.tv_usec / 1000));
 }
 
-void				display(pthread_mutex_t *speaking, int id, char *status)
+int						ft_isnum(char *str)
 {
-	pthread_mutex_lock(speaking);
-	printf("%lu %d %s\n", get_current_time(), id, status);
-	pthread_mutex_unlock(speaking);
+	int		i;
+
+	i = -1;
+	while (str[++i])
+	{
+		if (str[i] < '0' || str[i] > '9')
+			return (EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
 }
 
-int					ft_atoi(const char *str)
+int						ft_atoi(const char *str)
 {
 	int		i;
 	int		neg;

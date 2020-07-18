@@ -6,11 +6,11 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/06 21:52:25 by thgermai          #+#    #+#             */
-/*   Updated: 2020/06/15 15:06:08 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/07/17 14:26:49 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "philo.h"
+#include "../philo.h"
 #include <stdio.h> // a del
 
 static void			eating(t_philo *philo)
@@ -73,17 +73,35 @@ void				wait_philo_died(void *philos)
 	}
 }
 
+static int			check_args(char **av)
+{
+	int				i;
+
+	i = 0;
+	while (av[++i])
+	{
+		if (ft_isnum(av[i]))
+		{
+			write(2, WRONG_NUM, sizeof(WRONG_NUM));
+			return (EXIT_FAILURE);
+		}
+	}
+	return (EXIT_SUCCESS);
+}
+
 int					main(int ac, char **av)
 {
 	t_setting		setting;
 
 	if (ac <= 4 || ac > 6)
 	{
-		printf("Error: missing arguments\n");
-		return (0);
+		write(2, MISS_SETTINGS, sizeof(MISS_SETTINGS));
+		return (EXIT_FAILURE);
 	}
-	if (parse_setting(&setting, ac, av) == -1)
-		return (0);
+	if (check_args(av))
+		return (EXIT_FAILURE);
+	if (parse_setting(&setting, ac, av))
+		return (EXIT_FAILURE);
 	initiate(&setting);
-	return (0);
+	return (EXIT_SUCCESS);
 }

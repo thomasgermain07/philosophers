@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/06 12:57:37 by thomasgerma       #+#    #+#             */
-/*   Updated: 2020/06/15 15:11:24 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/07/17 14:33:44 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,13 @@
 # include <string.h>
 # include <sys/time.h>
 
-# define WRONG_SETTINGS "Missing arguments\n"
-# define EAT "is eating"
-# define SLEEP "is sleeping"
-# define THINK "is thinking"
-# define FORK "has taken a fork"
+# define MISS_SETTINGS "Error: missing arguments\n"
+# define WRONG_ARGS "Error: wrong arguments\n"
+# define WRONG_NUM "Error: arguments isn't of type INT\n"
+# define EAT "is eating\n"
+# define SLEEP "is sleeping\n"
+# define THINK "is thinking\n"
+# define FORK "has taken a fork\n"
 
 typedef struct			s_setting
 {
@@ -62,5 +64,6 @@ int						ft_atoi(const char *str);
 void					display(pthread_mutex_t *speaking,
 	int id, char *status);
 long unsigned int		get_current_time(void);
+int						ft_isnum(char *str);
 
 #endif
