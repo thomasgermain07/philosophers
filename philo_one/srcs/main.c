@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/06 21:52:25 by thgermai          #+#    #+#             */
-/*   Updated: 2020/07/17 14:26:49 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/07/19 16:07:11 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,7 @@ void				wait_philo_died(void *philos)
 		philo->n_eat == -1 ? out++ : (out = 0);
 		if (philo->n_eat != -1 && philo->death_time <= get_current_time())
 		{
-			pthread_mutex_lock(philo->speaking);
-			printf("%lu %d died\n", get_current_time(), philo->id);
+			display(philo->speaking, philo->id, DEAD);
 			return ;
 		}
 	}
