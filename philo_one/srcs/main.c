@@ -6,45 +6,35 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/06 21:52:25 by thgermai          #+#    #+#             */
-/*   Updated: 2020/07/19 16:07:11 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/09/14 16:29:38 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
-#include <stdio.h> // a del
-
-static void			eating(t_philo *philo)
-{
-	pthread_mutex_lock(philo->left_fork);
-	display(philo->speaking, philo->id, FORK);
-	pthread_mutex_lock(philo->right_fork);
-	display(philo->speaking, philo->id, FORK);
-	philo->death_time = get_current_time() + philo->setting->time_to_die;
-	display(philo->speaking, philo->id, EAT);
-	usleep(philo->setting->time_to_eat * 1000);
-	pthread_mutex_unlock(philo->left_fork);
-	pthread_mutex_unlock(philo->right_fork);
-}
 
 void				*start_routine(void *arg)
 {
-	t_philo		*philo;
+	t_philo		*p;
+	int			nb_time_eat;
 
-	philo = (t_philo *)arg;
-	while (1)
+	p = (t_philo *)arg;
+	nb_time_eat = p->setting->nb_time_eat;
+	while (nb_time_eat == -1 || p->n_eat++ != nb_time_eat)
 	{
-		eating(philo);
-		philo->n_eat++;
-		if (philo->setting->number_of_time_to_eat != -1 &&
-			philo->n_eat == philo->setting->number_of_time_to_eat)
-		{
-			philo->n_eat = -1;
-			return (NULL);
-		}
-		display(philo->speaking, philo->id, SLEEP);
-		usleep(philo->setting->time_to_sleep * 1000);
-		display(philo->speaking, philo->id, THINK);
+		pthread_mutex_lock(p->left_fork);
+		display(p->speaking, p->id, FORK);
+		pthread_mutex_lock(p->right_fork);
+		display(p->speaking, p->id, FORK);
+		p->death_time = get_current_time() + p->setting->time_to_die;
+		display(p->speaking, p->id, EAT);
+		usleep(p->setting->time_to_eat * 1000);
+		pthread_mutex_unlock(p->left_fork);
+		pthread_mutex_unlock(p->right_fork);
+		display(p->speaking, p->id, SLEEP);
+		usleep(p->setting->time_to_sleep * 1000);
+		display(p->speaking, p->id, THINK);
 	}
+	p->n_eat = -1;
 	return (NULL);
 }
 

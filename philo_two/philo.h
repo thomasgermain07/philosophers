@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/06 12:57:37 by thomasgerma       #+#    #+#             */
-/*   Updated: 2020/08/01 19:15:01 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/08/02 11:55:02 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ long unsigned int		get_current_time(void);
 void					*start_routine(void *arg);
 void					create_philos(t_philo *philos, t_setting *setting,
 	sem_t *sem, sem_t *speaking);
+void					wait_philo_died(t_philo *philos);
 /*
 ** Utiles Functions
 */

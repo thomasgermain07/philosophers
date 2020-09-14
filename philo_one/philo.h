@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/06 12:57:37 by thomasgerma       #+#    #+#             */
-/*   Updated: 2020/07/18 14:42:45 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/09/14 16:30:12 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@
 # include <stdlib.h>
 # include <string.h>
 # include <sys/time.h>
+
+// Delete this
+#include <stdio.h>
 
 # define MISS_SETTINGS "Error: missing arguments\n"
 # define WRONG_ARGS "Error: wrong arguments\n"
@@ -34,7 +37,7 @@ typedef struct			s_setting
 	int					time_to_die;
 	int					time_to_eat;
 	int					time_to_sleep;
-	int					number_of_time_to_eat;
+	int					nb_time_eat;
 }						t_setting;
 
 typedef struct			s_philo
@@ -49,9 +52,11 @@ typedef struct			s_philo
 	t_setting			*setting;
 }						t_philo;
 
+
 /*
 ** Main Functions
 */
+
 int						parse_setting(t_setting *setting, int ac, char **arg);
 void					initiate(t_setting *setting);
 void					*start_routine(void *arg);
@@ -61,6 +66,7 @@ void					wait_philo_died(void *arg);
 /*
 ** Utiles Functions
 */
+
 int						ft_atoi(const char *str);
 void					display(pthread_mutex_t *speaking,
 	int id, char *status);

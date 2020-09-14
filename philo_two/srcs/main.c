@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/19 16:11:53 by thgermai          #+#    #+#             */
-/*   Updated: 2020/08/01 19:29:53 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/08/03 13:45:54 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,39 +50,6 @@ void				*start_routine(void *arg)
 	return (NULL);
 }
 
-static void			*check_philo_health(void *philo)
-{
-	int				diff;
-
-	while (1)
-	{
-		diff = get_current_time() - ((t_philo *)philo)->death_time;
-		if (diff <= 0)
-		{
-			display(((t_philo *)philo)->speaking, ((t_philo *)philo)->id, DEAD);
-			*((t_philo *)philo)->signal = 1;
-			return (NULL);
-		}
-	}
-}
-
-static void			wait_philo_died(t_philo *philos)
-{
-	int			i;
-	int			signal;
-	pthread_t	thread;
-
-	signal = 0;
-	i = -1;
-	while (++i < philos->setting->num_of_philo)
-		philos[i].signal = &signal;
-	i = -1;
-	while (++i < philos->setting->num_of_philo)
-		pthread_create(&thread, NULL, &check_philo_health, (void *)(philos + i));
-	while (!signal)
-		;
-}
-
 static void			initate_philos(t_setting *setting)
 {
 	t_philo 		philos[setting->num_of_philo];
@@ -105,6 +72,7 @@ static void			initate_philos(t_setting *setting)
 	}
 	create_philos(philos, setting, sem, speaking);
 	wait_philo_died((void *)philos);
+	printf("C'est encore plus bizzare si ca fini ici\n");
 	sem_close(speaking);
 	sem_close(sem);
 	sem_unlink("/sem");

@@ -6,7 +6,7 @@
 #    By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/15 15:15:15 by thgermai          #+#    #+#              #
-#    Updated: 2020/07/25 16:43:11 by thgermai         ###   ########.fr        #
+#    Updated: 2020/08/02 11:45:39 by thgermai         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,8 @@ OBJSDIR = .objs
 SRCS = display.c\
 		initiate.c\
 		utiles.c\
-		main.c
+		main.c\
+		wait_for_death.c
 
 INCLUDES = -I .
 OBJS = $(addprefix $(OBJSDIR)/, $(SRCS:.c=.o))

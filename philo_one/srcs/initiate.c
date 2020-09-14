@@ -6,12 +6,14 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/10 12:36:23 by thgermai          #+#    #+#             */
-/*   Updated: 2020/07/17 14:26:52 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/09/14 16:30:01 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
-#include <stdio.h> // a del
+
+long unsigned int				start; // del
+long unsigned int				end_of_sim; // del
 
 static void		initiate_philos(t_setting *setting,
 	t_philo *philos, pthread_mutex_t *forks)
@@ -34,7 +36,7 @@ static void		initiate_philos(t_setting *setting,
 		(philos + i)->n_eat = 0;
 		(philos + i)->death_time = get_current_time() + setting->time_to_die;
 		pthread_create(&(philos + i)->thread, NULL, start_routine, philos + i);
-		usleep(philos->setting->time_to_eat * 100);
+		usleep(philos->setting->time_to_eat);
 	}
 }
 
@@ -57,8 +59,12 @@ void		initiate(t_setting *setting)
 	i = -1;
 	while (++i < setting->num_of_philo)
 		pthread_mutex_init(&forks[i], NULL);
+	start = get_current_time(); // del
 	initiate_philos(setting, philos, forks);
 	wait_philo_died(philos);
+	end_of_sim = get_current_time(); // del
+	printf("started at %lu\nend of sim at %lu\n", start, end_of_sim);
+	printf("running time = %lu ms\n", end_of_sim - start);
 	clean_mutex_thread(philos);
 }
 
@@ -69,7 +75,7 @@ static int		check_param(t_setting *setting, int ac)
 	if (setting->time_to_die < 0 || setting->time_to_eat < 0 ||
 		setting->time_to_sleep < 0)
 		return (EXIT_FAILURE);
-	if (ac == 6 && setting->number_of_time_to_eat < 0)
+	if (ac == 6 && setting->nb_time_eat < 0)
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
@@ -81,9 +87,9 @@ int				parse_setting(t_setting *setting, int ac, char **arg)
 	setting->time_to_eat = ft_atoi(arg[3]);
 	setting->time_to_sleep = ft_atoi(arg[4]);
 	if (ac == 6)
-		setting->number_of_time_to_eat = ft_atoi(arg[5]);
+		setting->nb_time_eat = ft_atoi(arg[5]);
 	else
-		setting->number_of_time_to_eat = -1;
+		setting->nb_time_eat = -1;
 	if (check_param(setting, ac))
 	{
 		write(2, WRONG_ARGS, sizeof(WRONG_ARGS));
