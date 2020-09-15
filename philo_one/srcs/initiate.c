@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/10 12:36:23 by thgermai          #+#    #+#             */
-/*   Updated: 2020/09/15 14:03:03 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/09/15 22:34:16 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ static void		initiate_philos(t_setting *setting,
 
 	pthread_mutex_init(&speaking, NULL);
 	i = -1;
+	g_start_time = get_current_time();
 	while (++i < setting->num_of_philo)
 	{
 		if (i == 0)

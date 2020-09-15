@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/17 14:28:38 by thgermai          #+#    #+#             */
-/*   Updated: 2020/09/14 16:58:04 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/09/15 22:37:49 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static int		convert_to_str(long unsigned int n, char *buff, int start)
 	int			ret;
 
 	i = start;
-	while (n)
+	while (n || (!i && !n))
 	{
 		buff[i++] = n % 10 + 48;
 		n = n / 10;
@@ -78,12 +78,12 @@ void			display(pthread_mutex_t *speaking, int id, char *status)
 	char		tab[50];
 	int 		ret;
 
+	pthread_mutex_lock(speaking);
 	ret = convert_to_str(get_current_time(), tab, 0);
 	tab[ret] = ' ';
 	ret += convert_to_str((long unsigned int)id, tab, ret + 1);
 	tab[ret + 1] = ' ';
 	ret = insert_status(tab, status, ret + 2);
-	pthread_mutex_lock(speaking);
 	write(1, tab, ret);
 	if (ft_strlen(status) != 5)
 		pthread_mutex_unlock(speaking);

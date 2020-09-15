@@ -6,19 +6,20 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/06 13:07:08 by thomasgerma       #+#    #+#             */
-/*   Updated: 2020/07/17 14:29:28 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/09/15 22:34:06 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
-#include <stdio.h>
 
 long unsigned int	get_current_time(void)
 {
 	struct timeval		t1;
 
 	gettimeofday(&t1, NULL);
-	return ((t1.tv_sec * 1000) + (t1.tv_usec / 1000));
+	if (!g_start_time)
+		return (((t1.tv_sec * 1000) + (t1.tv_usec / 1000)));
+	return ((t1.tv_sec * 1000) + (t1.tv_usec / 1000) - g_start_time);
 }
 
 int						ft_isnum(char *str)

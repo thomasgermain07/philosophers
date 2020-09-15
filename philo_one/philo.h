@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/06 12:57:37 by thomasgerma       #+#    #+#             */
-/*   Updated: 2020/09/15 13:28:54 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/09/15 22:33:09 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@
 # define THINK "is thinking\n"
 # define FORK "has taken a fork\n"
 # define DEAD "died\n"
+
+long unsigned int		g_start_time;
 
 typedef struct			s_setting
 {

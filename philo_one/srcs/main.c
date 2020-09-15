@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/06 21:52:25 by thgermai          #+#    #+#             */
-/*   Updated: 2020/09/15 14:03:15 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/09/15 22:33:17 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ int					main(int ac, char **av)
 		return (EXIT_FAILURE);
 	if (parse_setting(&setting, ac, av))
 		return (EXIT_FAILURE);
+	g_start_time = 0;
 	initiate(&setting);
 	return (EXIT_SUCCESS);
 }
