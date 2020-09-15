@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/06 12:57:37 by thomasgerma       #+#    #+#             */
-/*   Updated: 2020/09/14 16:30:12 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/09/15 13:28:54 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <sys/time.h>
 
 // Delete this
-#include <stdio.h>
+# include <stdio.h>
 
 # define MISS_SETTINGS "Error: missing arguments\n"
 # define WRONG_ARGS "Error: wrong arguments\n"

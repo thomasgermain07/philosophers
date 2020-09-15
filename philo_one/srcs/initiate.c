@@ -6,14 +6,11 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/10 12:36:23 by thgermai          #+#    #+#             */
-/*   Updated: 2020/09/14 16:30:01 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/09/15 14:03:03 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
-
-long unsigned int				start; // del
-long unsigned int				end_of_sim; // del
 
 static void		initiate_philos(t_setting *setting,
 	t_philo *philos, pthread_mutex_t *forks)
@@ -59,12 +56,8 @@ void		initiate(t_setting *setting)
 	i = -1;
 	while (++i < setting->num_of_philo)
 		pthread_mutex_init(&forks[i], NULL);
-	start = get_current_time(); // del
 	initiate_philos(setting, philos, forks);
 	wait_philo_died(philos);
-	end_of_sim = get_current_time(); // del
-	printf("started at %lu\nend of sim at %lu\n", start, end_of_sim);
-	printf("running time = %lu ms\n", end_of_sim - start);
 	clean_mutex_thread(philos);
 }
 
