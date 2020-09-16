@@ -6,7 +6,7 @@
 #    By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/15 15:15:15 by thgermai          #+#    #+#              #
-#    Updated: 2020/07/17 14:29:35 by thgermai         ###   ########.fr        #
+#    Updated: 2020/09/16 15:39:38 by thgermai         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,6 +33,10 @@ all : $(NAME)
 
 $(NAME) : $(OBJS)
 	@(gcc $(CFLAGS) $(LIB) $(INCLUDES) $(OBJS) -o $(NAME))
+	@(echo "$(NAME) created")
+
+fg : $(OBJS)
+	@(gcc $(CFLAGS) -g3 -fsanitize=address $(LIB) $(INCLUDES) $(OBJS) -o $(NAME))
 	@(echo "$(NAME) created")
 
 $(OBJSDIR)/%.o : $(SRCSDIR)/%.c | $(OBJSDIR)

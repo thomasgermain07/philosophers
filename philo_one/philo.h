@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/06 12:57:37 by thomasgerma       #+#    #+#             */
-/*   Updated: 2020/09/15 22:33:09 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/09/16 15:30:42 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ typedef struct			s_philo
 	t_setting			*setting;
 }						t_philo;
 
-
 /*
 ** Main Functions
 */
@@ -63,7 +62,7 @@ int						parse_setting(t_setting *setting, int ac, char **arg);
 void					initiate(t_setting *setting);
 void					*start_routine(void *arg);
 long unsigned int		get_current_time(void);
-void					wait_philo_died(void *arg);
+void					*wait_philo_died(void *arg);
 
 /*
 ** Utiles Functions

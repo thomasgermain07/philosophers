@@ -6,20 +6,27 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/06 21:52:25 by thgermai          #+#    #+#             */
-/*   Updated: 2020/09/15 22:33:17 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/09/16 15:43:36 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
+static void			ft_sleep(unsigned int time)
+{
+	long unsigned int	finish;
+
+	finish = get_current_time() + time;
+	while (get_current_time() < finish)
+		usleep(1);
+}
+
 void				*start_routine(void *arg)
 {
 	t_philo		*p;
-	int			nb_time_eat;
 
 	p = (t_philo *)arg;
-	nb_time_eat = p->setting->nb_time_eat;
-	while (nb_time_eat == -1 || p->n_eat++ != nb_time_eat)
+	while (p->n_eat-- != 0)
 	{
 		pthread_mutex_lock(p->left_fork);
 		display(p->speaking, p->id, FORK);
@@ -27,18 +34,18 @@ void				*start_routine(void *arg)
 		display(p->speaking, p->id, FORK);
 		p->death_time = get_current_time() + p->setting->time_to_die;
 		display(p->speaking, p->id, EAT);
-		usleep(p->setting->time_to_eat * 1000);
+		ft_sleep(p->setting->time_to_eat);
 		pthread_mutex_unlock(p->left_fork);
 		pthread_mutex_unlock(p->right_fork);
 		display(p->speaking, p->id, SLEEP);
-		usleep(p->setting->time_to_sleep * 1000);
+		ft_sleep(p->setting->time_to_sleep);
 		display(p->speaking, p->id, THINK);
 	}
 	p->n_eat = -1;
 	return (NULL);
 }
 
-void				wait_philo_died(void *philos)
+void				*wait_philo_died(void *philos)
 {
 	int			i;
 	int			out;
@@ -57,9 +64,10 @@ void				wait_philo_died(void *philos)
 		if (philo->n_eat != -1 && philo->death_time <= get_current_time())
 		{
 			display(philo->speaking, philo->id, DEAD);
-			return ;
+			return (NULL);
 		}
 	}
+	return (NULL);
 }
 
 static int			check_args(char **av)
