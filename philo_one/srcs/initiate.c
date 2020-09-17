@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/10 12:36:23 by thgermai          #+#    #+#             */
-/*   Updated: 2020/09/16 15:44:40 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/09/16 16:41:49 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,23 +53,11 @@ void		initiate(t_setting *setting)
 	pthread_mutex_t	forks[setting->num_of_philo]; // a remplacer par un malloc
 	t_philo			philos[setting->num_of_philo]; // a remplacer par un malloc
 	int				i;
-	// int				j;
-	// pthread_t		monitoring[setting->num_of_philo / 10]; // a remplacer par un malloc
 
 	i = -1;
 	while (++i < setting->num_of_philo)
 		pthread_mutex_init(&forks[i], NULL);
 	initiate_philos(setting, philos, forks);
-	// i = 0;
-	// j = 0;
-	// while ((setting->num_of_philo - i) > 10)
-	// {
-	// 	pthread_create(&monitoring[j++], NULL, wait_philo_died, &philos[i]);
-	// 	i += 10;
-	// }
-	// while ((setting->num_of_philo - i) < 10)
-	// 	i++;
-	// wait_philo_died(&philos[i]);
 	wait_philo_died(philos);
 	clean_mutex_thread(philos);
 }

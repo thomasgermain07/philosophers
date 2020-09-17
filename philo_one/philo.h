@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/06 12:57:37 by thomasgerma       #+#    #+#             */
-/*   Updated: 2020/09/16 15:30:42 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/09/17 14:32:06 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void					*wait_philo_died(void *arg);
 
 int						ft_atoi(const char *str);
 void					display(pthread_mutex_t *speaking,
-	int id, char *status);
+	long unsigned int time, int id, char *status);
 long unsigned int		get_current_time(void);
 int						ft_isnum(char *str);
 

@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/17 14:28:38 by thgermai          #+#    #+#             */
-/*   Updated: 2020/09/15 22:45:17 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/09/17 14:25:11 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,17 +73,18 @@ static int		insert_status(char *buff, char *status, int i)
 	return (i);
 }
 
-void			display(pthread_mutex_t *speaking, int id, char *status)
+void			display(pthread_mutex_t *speaking,
+	long unsigned int time, int id, char *status)
 {
 	char		tab[50];
 	int 		ret;
 
-	pthread_mutex_lock(speaking);
-	ret = convert_to_str(get_current_time(), tab, 0);
+	ret = convert_to_str(time, tab, 0);
 	tab[ret] = ' ';
 	ret += convert_to_str((long unsigned int)id, tab, ret + 1);
 	tab[ret + 1] = ' ';
 	ret = insert_status(tab, status, ret + 2);
+	pthread_mutex_lock(speaking);
 	write(1, tab, ret);
 	if (ft_strlen(status) != 5)
 		pthread_mutex_unlock(speaking);

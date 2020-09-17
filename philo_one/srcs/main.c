@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/06 21:52:25 by thgermai          #+#    #+#             */
-/*   Updated: 2020/09/16 15:43:36 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/09/16 18:11:37 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,17 @@ void				*start_routine(void *arg)
 	while (p->n_eat-- != 0)
 	{
 		pthread_mutex_lock(p->left_fork);
-		display(p->speaking, p->id, FORK);
+		display(p->speaking, get_current_time(), p->id, FORK);
 		pthread_mutex_lock(p->right_fork);
-		display(p->speaking, p->id, FORK);
+		display(p->speaking, get_current_time(), p->id, FORK);
 		p->death_time = get_current_time() + p->setting->time_to_die;
-		display(p->speaking, p->id, EAT);
+		display(p->speaking, get_current_time(), p->id, EAT);
 		ft_sleep(p->setting->time_to_eat);
 		pthread_mutex_unlock(p->left_fork);
 		pthread_mutex_unlock(p->right_fork);
-		display(p->speaking, p->id, SLEEP);
+		display(p->speaking, get_current_time(), p->id, SLEEP);
 		ft_sleep(p->setting->time_to_sleep);
-		display(p->speaking, p->id, THINK);
+		display(p->speaking, get_current_time() ,p->id, THINK);
 	}
 	p->n_eat = -1;
 	return (NULL);
@@ -63,7 +63,7 @@ void				*wait_philo_died(void *philos)
 		philo->n_eat == -1 ? out++ : (out = 0);
 		if (philo->n_eat != -1 && philo->death_time <= get_current_time())
 		{
-			display(philo->speaking, philo->id, DEAD);
+			display(philo->speaking, get_current_time(), philo->id, DEAD);
 			return (NULL);
 		}
 	}
