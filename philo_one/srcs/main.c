@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/06 21:52:25 by thgermai          #+#    #+#             */
-/*   Updated: 2020/09/16 18:11:37 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/09/18 16:52:51 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void				*start_routine(void *arg)
 	t_philo		*p;
 
 	p = (t_philo *)arg;
+	p->death_time = get_current_time() + p->setting->time_to_die;
 	while (p->n_eat-- != 0)
 	{
 		pthread_mutex_lock(p->left_fork);
@@ -42,28 +43,27 @@ void				*start_routine(void *arg)
 		display(p->speaking, get_current_time() ,p->id, THINK);
 	}
 	p->n_eat = -1;
+	p->death_time = ULONG_MAX;
+	p->setting->end_signal++;
 	return (NULL);
 }
 
-void				*wait_philo_died(void *philos)
+void				*wait_philo_died(void *arg)
 {
 	int			i;
-	int			out;
-	t_philo		*philo;
+	t_philo		*philos;
 
-	i = -1;
-	out = 0;
-	philo = (t_philo *)philos;
-	while (++i <= philo->setting->num_of_philo
-		&& out != philo->setting->num_of_philo)
+	philos = (t_philo *)arg;
+	i = philos->setting->num_of_philo + 1;
+	while (--i >= -1
+		&& philos->setting->end_signal != philos->setting->num_of_philo)
 	{
-		if (i == philo->setting->num_of_philo)
-			i = 0;
-		philo = ((t_philo *)philos + i);
-		philo->n_eat == -1 ? out++ : (out = 0);
-		if (philo->n_eat != -1 && philo->death_time <= get_current_time())
+		if (i == -1)
+			i = philos->setting->num_of_philo + 1;
+		if (philos[i].death_time <= get_current_time())
 		{
-			display(philo->speaking, get_current_time(), philo->id, DEAD);
+			pthread_mutex_lock(philos->speaking);
+			display2(philos[i].death_time, philos[i].id, DEAD);
 			return (NULL);
 		}
 	}

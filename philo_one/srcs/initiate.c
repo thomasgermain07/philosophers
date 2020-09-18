@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/10 12:36:23 by thgermai          #+#    #+#             */
-/*   Updated: 2020/09/16 16:41:49 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/09/18 16:43:05 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,19 @@ static void		initiate_philos(t_setting *setting,
 	pthread_mutex_init(&speaking, NULL);
 	i = -1;
 	g_start_time = get_current_time();
+	setting->end_signal = 0;
 	while (++i < setting->num_of_philo)
 	{
 		if (i == 0)
 			philos->left_fork = forks + (setting->num_of_philo - 1);
 		else
-			(philos + i)->left_fork = forks + (i - 1);
-		(philos + i)->right_fork = forks + i;
-		(philos + i)->id = i + 1;
-		(philos + i)->speaking = &speaking;
-		(philos + i)->setting = setting;
-		(philos + i)->n_eat = setting->nb_time_eat;
-		(philos + i)->death_time = get_current_time() + setting->time_to_die;
-		pthread_create(&(philos + i)->thread, NULL, start_routine, philos + i);
+			philos[i].left_fork = forks + (i - 1);
+		philos[i].right_fork = forks + i;
+		philos[i].id = i + 1;
+		philos[i].speaking = &speaking;
+		philos[i].setting = setting;
+		philos[i].n_eat = setting->nb_time_eat;
+		pthread_create(&philos[i].thread, NULL, start_routine, philos + i);
 		usleep(philos->setting->time_to_eat);
 	}
 }
@@ -45,7 +45,10 @@ static void		clean_mutex_thread(t_philo *philos)
 	i = -1;
 	pthread_mutex_destroy(philos->speaking);
 	while (++i < philos->setting->num_of_philo)
-		pthread_mutex_destroy((philos + i)->right_fork);
+	{
+		pthread_detach(philos[i].thread);
+		pthread_mutex_destroy(philos[i].right_fork);
+	}
 }
 
 void		initiate(t_setting *setting)

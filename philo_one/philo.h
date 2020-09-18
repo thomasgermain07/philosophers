@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/06 12:57:37 by thomasgerma       #+#    #+#             */
-/*   Updated: 2020/09/17 14:32:06 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/09/18 16:40:30 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <stdlib.h>
 # include <string.h>
 # include <sys/time.h>
+# include <limits.h>
 
 // Delete this
 # include <stdio.h>
@@ -40,6 +41,7 @@ typedef struct			s_setting
 	int					time_to_eat;
 	int					time_to_sleep;
 	int					nb_time_eat;
+	int					end_signal;
 }						t_setting;
 
 typedef struct			s_philo
@@ -71,6 +73,7 @@ void					*wait_philo_died(void *arg);
 int						ft_atoi(const char *str);
 void					display(pthread_mutex_t *speaking,
 	long unsigned int time, int id, char *status);
+void					display2(long unsigned int time, int id, char *status);
 long unsigned int		get_current_time(void);
 int						ft_isnum(char *str);
 

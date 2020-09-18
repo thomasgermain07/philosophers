@@ -6,22 +6,12 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/17 14:28:38 by thgermai          #+#    #+#             */
-/*   Updated: 2020/09/17 14:25:11 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/09/17 17:34:15 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
-
-static int		ft_strlen(char *str)
-{
-	int			i;
-
-	i = -1;
-	while (str[++i])
-		;
-	return (i);
-}
-
+#include <errno.h>
 static int		convert_to_str(long unsigned int n, char *buff, int start)
 {
 	int			i;
@@ -86,6 +76,18 @@ void			display(pthread_mutex_t *speaking,
 	ret = insert_status(tab, status, ret + 2);
 	pthread_mutex_lock(speaking);
 	write(1, tab, ret);
-	if (ft_strlen(status) != 5)
-		pthread_mutex_unlock(speaking);
+	pthread_mutex_unlock(speaking);
+}
+
+void			display2(long unsigned int time, int id, char *status)
+{
+	char		tab[50];
+	int 		ret;
+
+	ret = convert_to_str(time, tab, 0);
+	tab[ret] = ' ';
+	ret += convert_to_str((long unsigned int)id, tab, ret + 1);
+	tab[ret + 1] = ' ';
+	ret = insert_status(tab, status, ret + 2);
+	write(1, tab, ret);
 }
