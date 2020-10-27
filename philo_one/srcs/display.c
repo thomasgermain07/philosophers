@@ -6,12 +6,12 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/17 14:28:38 by thgermai          #+#    #+#             */
-/*   Updated: 2020/09/17 17:34:15 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/10/27 22:45:16 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
-#include <errno.h>
+
 static int		convert_to_str(long unsigned int n, char *buff, int start)
 {
 	int			i;
@@ -67,7 +67,7 @@ void			display(pthread_mutex_t *speaking,
 	long unsigned int time, int id, char *status)
 {
 	char		tab[50];
-	int 		ret;
+	int			ret;
 
 	ret = convert_to_str(time, tab, 0);
 	tab[ret] = ' ';
@@ -82,7 +82,7 @@ void			display(pthread_mutex_t *speaking,
 void			display2(long unsigned int time, int id, char *status)
 {
 	char		tab[50];
-	int 		ret;
+	int			ret;
 
 	ret = convert_to_str(time, tab, 0);
 	tab[ret] = ' ';

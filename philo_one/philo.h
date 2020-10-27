@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/06 12:57:37 by thomasgerma       #+#    #+#             */
-/*   Updated: 2020/09/18 16:40:30 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/10/27 22:30:55 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ typedef struct			s_setting
 	int					time_to_eat;
 	int					time_to_sleep;
 	int					nb_time_eat;
+	int					end_count;
 	int					end_signal;
 }						t_setting;
 
@@ -50,9 +51,11 @@ typedef struct			s_philo
 	long unsigned int	death_time;
 	int					n_eat;
 	pthread_t			thread;
+	pthread_t			monitor;
 	pthread_mutex_t		*speaking;
 	pthread_mutex_t		*left_fork;
 	pthread_mutex_t		*right_fork;
+	pthread_mutex_t		*eating;
 	t_setting			*setting;
 }						t_philo;
 
@@ -60,11 +63,9 @@ typedef struct			s_philo
 ** Main Functions
 */
 
-int						parse_setting(t_setting *setting, int ac, char **arg);
 void					initiate(t_setting *setting);
 void					*start_routine(void *arg);
 long unsigned int		get_current_time(void);
-void					*wait_philo_died(void *arg);
 
 /*
 ** Utiles Functions
@@ -76,5 +77,6 @@ void					display(pthread_mutex_t *speaking,
 void					display2(long unsigned int time, int id, char *status);
 long unsigned int		get_current_time(void);
 int						ft_isnum(char *str);
+void					ft_sleep(unsigned int time);
 
 #endif

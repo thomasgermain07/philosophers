@@ -6,68 +6,40 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/06 21:52:25 by thgermai          #+#    #+#             */
-/*   Updated: 2020/09/18 16:52:51 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/10/27 22:46:59 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-static void			ft_sleep(unsigned int time)
+static int			check_param(t_setting *setting, int ac)
 {
-	long unsigned int	finish;
-
-	finish = get_current_time() + time;
-	while (get_current_time() < finish)
-		usleep(1);
+	if (setting->num_of_philo <= 0)
+		return (EXIT_FAILURE);
+	if (setting->time_to_die < 0 || setting->time_to_eat < 0 ||
+		setting->time_to_sleep < 0)
+		return (EXIT_FAILURE);
+	if (ac == 6 && setting->nb_time_eat < 0)
+		return (EXIT_FAILURE);
+	return (EXIT_SUCCESS);
 }
 
-void				*start_routine(void *arg)
+static int			parse_setting(t_setting *setting, int ac, char **arg)
 {
-	t_philo		*p;
-
-	p = (t_philo *)arg;
-	p->death_time = get_current_time() + p->setting->time_to_die;
-	while (p->n_eat-- != 0)
+	setting->num_of_philo = ft_atoi(arg[1]);
+	setting->time_to_die = ft_atoi(arg[2]);
+	setting->time_to_eat = ft_atoi(arg[3]);
+	setting->time_to_sleep = ft_atoi(arg[4]);
+	if (ac == 6)
+		setting->nb_time_eat = ft_atoi(arg[5]);
+	else
+		setting->nb_time_eat = -1;
+	if (check_param(setting, ac))
 	{
-		pthread_mutex_lock(p->left_fork);
-		display(p->speaking, get_current_time(), p->id, FORK);
-		pthread_mutex_lock(p->right_fork);
-		display(p->speaking, get_current_time(), p->id, FORK);
-		p->death_time = get_current_time() + p->setting->time_to_die;
-		display(p->speaking, get_current_time(), p->id, EAT);
-		ft_sleep(p->setting->time_to_eat);
-		pthread_mutex_unlock(p->left_fork);
-		pthread_mutex_unlock(p->right_fork);
-		display(p->speaking, get_current_time(), p->id, SLEEP);
-		ft_sleep(p->setting->time_to_sleep);
-		display(p->speaking, get_current_time() ,p->id, THINK);
+		write(2, WRONG_ARGS, sizeof(WRONG_ARGS));
+		return (EXIT_FAILURE);
 	}
-	p->n_eat = -1;
-	p->death_time = ULONG_MAX;
-	p->setting->end_signal++;
-	return (NULL);
-}
-
-void				*wait_philo_died(void *arg)
-{
-	int			i;
-	t_philo		*philos;
-
-	philos = (t_philo *)arg;
-	i = philos->setting->num_of_philo + 1;
-	while (--i >= -1
-		&& philos->setting->end_signal != philos->setting->num_of_philo)
-	{
-		if (i == -1)
-			i = philos->setting->num_of_philo + 1;
-		if (philos[i].death_time <= get_current_time())
-		{
-			pthread_mutex_lock(philos->speaking);
-			display2(philos[i].death_time, philos[i].id, DEAD);
-			return (NULL);
-		}
-	}
-	return (NULL);
+	return (EXIT_SUCCESS);
 }
 
 static int			check_args(char **av)
