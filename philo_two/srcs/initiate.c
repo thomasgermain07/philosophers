@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/10 12:36:23 by thgermai          #+#    #+#             */
-/*   Updated: 2020/11/01 16:07:44 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/11/01 16:16:12 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static void		*wait_philo_died(void *arg)
 	return (NULL);
 }
 
-static void		clean_mutex_thread(t_philo *philos, sem_t *forks)
+static void		clean_mutex_thread(t_philo *philos)
 {
 	int		i;
 
@@ -65,14 +65,13 @@ static void		clean_mutex_thread(t_philo *philos, sem_t *forks)
 	while (++i < philos->setting->num_of_philo)
 	{
 		if (philos[i].monitor_sem)
-			del_sem(philos[i].monitor_name, philos[i].monitor_sem);
+			sem_unlink(philos[i].monitor_name);
 		free(philos[i].monitor_name);
 		pthread_detach(philos[i].monitor);
 		pthread_detach(philos[i].thread);
 	}
-	del_sem("/forks", forks);
-	del_sem("/speaking", philos->speaking);
-	printf("Finished cleaning all\n");
+	sem_unlink("/forks");
+	sem_unlink("/speaking");
 }
 
 void			initiate(t_setting *setting)
@@ -86,11 +85,11 @@ void			initiate(t_setting *setting)
 		return ;
 	if (!(philos = malloc(sizeof(t_philo) * setting->num_of_philo)))
 	{
-		del_sem("/forks", forks);
+		sem_unlink("/forks");
 		return ;
 	}
 	if (initiate_philos(setting, philos, forks) == EXIT_SUCCESS)
 		wait_philo_died(philos);
-	clean_mutex_thread(philos, forks);
+	clean_mutex_thread(philos);
 	free(philos);
 }

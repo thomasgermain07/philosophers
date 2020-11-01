@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/06 12:57:37 by thomasgerma       #+#    #+#             */
-/*   Updated: 2020/10/30 20:40:40 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/11/01 16:15:28 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ typedef struct			s_philo
 void					initiate(t_setting *setting);
 void					*start_routine(void *arg);
 long unsigned int		get_current_time(void);
+
 /*
 ** Utiles Functions
 */
@@ -84,9 +85,6 @@ long unsigned int		get_current_time(void);
 int						ft_isnum(char *str);
 void					ft_sleep(unsigned int time);
 sem_t					*create_sem(char *name, int value);
-void					del_sem(char *name, sem_t *sem);
 char					*get_name(int i);
-void					ft_sem_wait(t_philo *p, sem_t *sem);
-void					ft_sem_post(t_philo *p, sem_t *sem);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/06 13:07:08 by thomasgerma       #+#    #+#             */
-/*   Updated: 2020/11/01 16:07:59 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/11/01 16:18:25 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,13 +81,5 @@ sem_t				*create_sem(char *name, int value)
 		write(2, SEM_OPEN_FAILED, sizeof(SEM_OPEN_FAILED));
 		return (NULL);
 	}
-	return sem;
-}
-
-void				del_sem(char *name, sem_t *sem)
-{
-	(void)name;
-	(void)sem;
-	printf("deleting %s\n", name);
-	sem_unlink(name);
+	return (sem);
 }

@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/06 21:52:25 by thgermai          #+#    #+#             */
-/*   Updated: 2020/10/30 20:33:13 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/11/01 16:17:05 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,5 @@ int					main(int ac, char **av)
 		return (EXIT_FAILURE);
 	g_start_time = 0;
 	initiate(&setting);
-	// system("leaks philo_two");
 	return (EXIT_SUCCESS);
 }
