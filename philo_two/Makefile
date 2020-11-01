@@ -6,24 +6,24 @@
 #    By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/06/15 15:15:15 by thgermai          #+#    #+#              #
-#    Updated: 2020/08/02 11:45:39 by thgermai         ###   ########.fr        #
+#    Updated: 2020/10/28 12:33:31 by thgermai         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philo_two
 SRCSDIR = srcs
 OBJSDIR = .objs
-SRCS = display.c\
-		initiate.c\
+SRCS = initiate.c\
 		utiles.c\
 		main.c\
-		wait_for_death.c
+		display.c\
+		routine.c
 
 INCLUDES = -I .
 OBJS = $(addprefix $(OBJSDIR)/, $(SRCS:.c=.o))
 DPDCS = $(OBJS:.o=.d)
 LIB = -lpthread
-CFLAGS = -Wall -Wextra -Werror -pthread
+CFLAGS = -Wall -Wextra -Werror
 
 opti :
 	@(make -j all)
@@ -34,6 +34,10 @@ all : $(NAME)
 
 $(NAME) : $(OBJS)
 	@(gcc $(CFLAGS) $(LIB) $(INCLUDES) $(OBJS) -o $(NAME))
+	@(echo "$(NAME) created")
+
+fg : $(OBJS)
+	@(gcc $(CFLAGS) -g3 -fsanitize=address $(LIB) $(INCLUDES) $(OBJS) -o $(NAME))
 	@(echo "$(NAME) created")
 
 $(OBJSDIR)/%.o : $(SRCSDIR)/%.c | $(OBJSDIR)

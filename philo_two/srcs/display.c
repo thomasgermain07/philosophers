@@ -6,21 +6,11 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/07/17 14:28:38 by thgermai          #+#    #+#             */
-/*   Updated: 2020/09/14 16:37:01 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/10/29 10:43:14 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
-
-int				ft_strlen(char *str)
-{
-	int			i;
-
-	i = -1;
-	while (str[++i])
-		;
-	return (i);
-}
 
 static int		convert_to_str(long unsigned int n, char *buff, int start)
 {
@@ -28,7 +18,7 @@ static int		convert_to_str(long unsigned int n, char *buff, int start)
 	int			ret;
 
 	i = start;
-	while (n)
+	while (n || (!i && !n))
 	{
 		buff[i++] = n % 10 + 48;
 		n = n / 10;
@@ -73,20 +63,48 @@ static int		insert_status(char *buff, char *status, int i)
 	return (i);
 }
 
-void			display(sem_t *speaking, int id, char *status)
+void			display(sem_t *speaking,
+	long unsigned int time, int id, char *status)
 {
 	char		tab[50];
-	int 		ret;
+	int			ret;
 
-	ret = convert_to_str(get_current_time(), tab, 0);
+	if (!speaking)
+		return ;
+	ret = convert_to_str(time, tab, 0);
 	tab[ret] = ' ';
 	ret += convert_to_str((long unsigned int)id, tab, ret + 1);
 	tab[ret + 1] = ' ';
 	ret = insert_status(tab, status, ret + 2);
-	if (sem_wait(speaking) == -1)
-		exit(EXIT_FAILURE);
+	if (sem_wait(speaking) != -1)
+	{
+		write(1, tab, ret);
+		sem_post(speaking);
+	}
+}
+
+void			display2(long unsigned int time, int id, char *status)
+{
+	char		tab[50];
+	int			ret;
+
+	ret = convert_to_str(time, tab, 0);
+	tab[ret] = ' ';
+	ret += convert_to_str((long unsigned int)id, tab, ret + 1);
+	tab[ret + 1] = ' ';
+	ret = insert_status(tab, status, ret + 2);
 	write(1, tab, ret);
-	if (ft_strlen(status) != 5)
-		if (sem_post(speaking) == -1)
-			exit(EXIT_FAILURE);
+}
+
+char			*get_name(int i)
+{
+	char		*tab;
+	int			ret;
+
+	if (!(tab = malloc(sizeof(char) * 12)))
+		return (NULL);
+	ret = insert_status(tab, "/monitor", 0);
+	ret += convert_to_str((unsigned long int)i, tab, ret);
+	tab[ret] = '\0';
+	return (tab);
 }

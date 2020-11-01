@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/06 12:57:37 by thomasgerma       #+#    #+#             */
-/*   Updated: 2020/08/02 11:55:02 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/10/30 20:40:40 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,31 @@
 # define PHILO_H
 
 # include <pthread.h>
+# include <semaphore.h>
 # include <unistd.h>
 # include <stdlib.h>
 # include <string.h>
 # include <sys/time.h>
-# include <fcntl.h>
-# include <semaphore.h>
-# include <sys/stat.h>
+# include <limits.h>
+
+// Delete this
+# include <stdio.h>
 # include <errno.h>
 
 # define MISS_SETTINGS "Error: missing arguments\n"
 # define WRONG_ARGS "Error: wrong arguments\n"
 # define WRONG_NUM "Error: arguments isn't of type INT\n"
-# define SEM_OPEN_FAILED "Error: sem_open failed\n"
-# define SEM_WAIT_FAILED "Error: sem_wait failed\n"
-# define SEM_POST_FAILED "Error: sem_post failed\n"
-
 # define EAT "is eating\n"
 # define SLEEP "is sleeping\n"
 # define THINK "is thinking\n"
 # define FORK "has taken a fork\n"
 # define DEAD "died\n"
+
+# define SEM_OPEN_FAILED "Error: sem_open failed\n"
+# define SEM_WAIT_FAILED "Error: sem_wait failed\n"
+# define SEM_POST_FAILED "Error: sem_post failed\n"
+
+long unsigned int		g_start_time;
 
 typedef struct			s_setting
 {
@@ -42,7 +46,9 @@ typedef struct			s_setting
 	int					time_to_die;
 	int					time_to_eat;
 	int					time_to_sleep;
-	int					number_of_time_to_eat;
+	int					nb_time_eat;
+	int					end_count;
+	int					end_signal;
 }						t_setting;
 
 typedef struct			s_philo
@@ -50,29 +56,37 @@ typedef struct			s_philo
 	int					id;
 	long unsigned int	death_time;
 	int					n_eat;
-	int					*signal;
+	char				*monitor_name;
 	pthread_t			thread;
-	sem_t				*sem;
+	pthread_t			monitor;
 	sem_t				*speaking;
+	sem_t				*forks;
+	sem_t				*monitor_sem;
 	t_setting			*setting;
 }						t_philo;
 
 /*
 ** Main Functions
 */
-int						parse_setting(t_setting *setting, int ac, char **arg);
-long unsigned int		get_current_time(void);
+
+void					initiate(t_setting *setting);
 void					*start_routine(void *arg);
-void					create_philos(t_philo *philos, t_setting *setting,
-	sem_t *sem, sem_t *speaking);
-void					wait_philo_died(t_philo *philos);
+long unsigned int		get_current_time(void);
 /*
 ** Utiles Functions
 */
+
 int						ft_atoi(const char *str);
-void					display(sem_t *speaking, int id, char *status);
+void					display(sem_t *speaking,
+	long unsigned int time, int id, char *status);
+void					display2(long unsigned int time, int id, char *status);
 long unsigned int		get_current_time(void);
 int						ft_isnum(char *str);
-int						ft_strlen(char *str);
+void					ft_sleep(unsigned int time);
+sem_t					*create_sem(char *name, int value);
+void					del_sem(char *name, sem_t *sem);
+char					*get_name(int i);
+void					ft_sem_wait(t_philo *p, sem_t *sem);
+void					ft_sem_post(t_philo *p, sem_t *sem);
 
 #endif
