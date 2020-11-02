@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/10 12:36:23 by thgermai          #+#    #+#             */
-/*   Updated: 2020/11/02 14:46:54 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/11/02 14:46:38 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void		set_init_value(t_philo *philo, sem_t *forks,
 }
 
 static int		initiate_philos(t_setting *setting,
-	t_philo *philos, sem_t *forks)
+	t_philo *philos, sem_t *forks, pid_t *pids)
 {
 	int				i;
 	sem_t			*speaking;
@@ -40,7 +40,8 @@ static int		initiate_philos(t_setting *setting,
 		philos[i].monitor_name = get_name(philos[i].id);
 		if (!(philos[i].monitor_sem = create_sem(philos[i].monitor_name, 1)))
 			return (EXIT_FAILURE);
-		pthread_create(&philos[i].thread, NULL, start_routine, philos + i);
+		if ((pids[i] = fork()) == 0)
+			start_routine(&philos[i]);
 		usleep(philos->setting->time_to_eat);
 	}
 	return (EXIT_SUCCESS);
@@ -49,15 +50,14 @@ static int		initiate_philos(t_setting *setting,
 static void		*wait_philo_died(void *arg)
 {
 	t_philo		*philos;
+	int			status;
 
 	philos = (t_philo *)arg;
-	while (!philos->setting->end_signal &&
-		philos->setting->end_count != philos->setting->num_of_philo)
-		;
+	waitpid(-1, &status, 0);
 	return (NULL);
 }
 
-static void		clean_mutex_thread(t_philo *philos)
+static void		clean_mutex_thread(t_philo *philos, pid_t *pids)
 {
 	int		i;
 
@@ -67,8 +67,7 @@ static void		clean_mutex_thread(t_philo *philos)
 		if (philos[i].monitor_sem)
 			sem_unlink(philos[i].monitor_name);
 		free(philos[i].monitor_name);
-		pthread_detach(philos[i].monitor);
-		pthread_detach(philos[i].thread);
+		kill(pids[i], 3);
 	}
 	sem_unlink("/forks");
 	sem_unlink("/speaking");
@@ -78,16 +77,24 @@ void			initiate(t_setting *setting)
 {
 	sem_t			*forks;
 	t_philo			*philos;
+	pid_t			*pids;
 
 	if (!(forks = create_sem("/forks", setting->num_of_philo)))
 		return ;
-	if (!(philos = malloc(sizeof(t_philo) * setting->num_of_philo)))
+	if (!(pids = malloc(sizeof(pid_t) * setting->num_of_philo)))
 	{
 		sem_unlink("/forks");
 		return ;
 	}
-	if (initiate_philos(setting, philos, forks) == EXIT_SUCCESS)
+	if (!(philos = malloc(sizeof(t_philo) * setting->num_of_philo)))
+	{
+		sem_unlink("/forks");
+		free(pids);
+		return ;
+	}
+	if (initiate_philos(setting, philos, forks, pids) == EXIT_SUCCESS)
 		wait_philo_died(philos);
-	clean_mutex_thread(philos);
+	clean_mutex_thread(philos, pids);
+	free(pids);
 	free(philos);
 }
