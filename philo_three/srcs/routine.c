@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/27 22:23:22 by thgermai          #+#    #+#             */
-/*   Updated: 2020/11/02 14:45:31 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/11/03 03:19:52 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static void		eat(t_philo *p)
 	sem_post(p->forks);
 }
 
-void			*start_routine(void *arg)
+void			start_routine(void *arg)
 {
 	t_philo				*p;
 
@@ -67,5 +67,4 @@ void			*start_routine(void *arg)
 		display(p->speaking, get_current_time(), p->id, THINK);
 	}
 	exit(1);
-	return (NULL);
 }

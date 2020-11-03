@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/06 12:57:37 by thomasgerma       #+#    #+#             */
-/*   Updated: 2020/11/02 14:21:28 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/11/03 03:19:46 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,6 @@
 # include <sys/types.h>
 # include <signal.h>
 # include <limits.h>
-
-// Delete this
-# include <stdio.h>
-# include <errno.h>
 
 # define MISS_SETTINGS "Error: missing arguments\n"
 # define WRONG_ARGS "Error: wrong arguments\n"
@@ -73,7 +69,7 @@ typedef struct			s_philo
 */
 
 void					initiate(t_setting *setting);
-void					*start_routine(void *arg);
+void					start_routine(void *arg);
 long unsigned int		get_current_time(void);
 
 /*

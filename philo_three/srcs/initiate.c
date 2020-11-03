@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/10 12:36:23 by thgermai          #+#    #+#             */
-/*   Updated: 2020/11/02 14:46:38 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/11/03 03:22:04 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,16 +47,6 @@ static int		initiate_philos(t_setting *setting,
 	return (EXIT_SUCCESS);
 }
 
-static void		*wait_philo_died(void *arg)
-{
-	t_philo		*philos;
-	int			status;
-
-	philos = (t_philo *)arg;
-	waitpid(-1, &status, 0);
-	return (NULL);
-}
-
 static void		clean_mutex_thread(t_philo *philos, pid_t *pids)
 {
 	int		i;
@@ -93,7 +83,7 @@ void			initiate(t_setting *setting)
 		return ;
 	}
 	if (initiate_philos(setting, philos, forks, pids) == EXIT_SUCCESS)
-		wait_philo_died(philos);
+		waitpid(-1, NULL, 0);
 	clean_mutex_thread(philos, pids);
 	free(pids);
 	free(philos);
