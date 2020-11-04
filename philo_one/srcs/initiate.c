@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/10 12:36:23 by thgermai          #+#    #+#             */
-/*   Updated: 2020/10/27 22:45:47 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/11/04 05:35:14 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ static int		initiate_philos(t_setting *setting,
 			return (EXIT_FAILURE);
 		pthread_mutex_init(philos[i].eating, NULL);
 		pthread_create(&philos[i].thread, NULL, start_routine, philos + i);
+		pthread_detach(philos[i].thread);
 		usleep(philos->setting->time_to_eat);
 	}
 	return (EXIT_SUCCESS);
@@ -68,8 +69,6 @@ static void		clean_mutex_thread(t_philo *philos)
 	pthread_mutex_destroy(philos->speaking);
 	while (++i < philos->setting->num_of_philo)
 	{
-		pthread_detach(philos[i].monitor);
-		pthread_detach(philos[i].thread);
 		pthread_mutex_destroy(philos[i].right_fork);
 		pthread_mutex_destroy(philos[i].eating);
 		free(philos[i].eating);

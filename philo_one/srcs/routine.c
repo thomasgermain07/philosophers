@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/27 22:23:22 by thgermai          #+#    #+#             */
-/*   Updated: 2020/10/27 22:46:53 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/11/04 05:35:27 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ void			*start_routine(void *arg)
 	p = (t_philo *)arg;
 	p->death_time = get_current_time() + p->setting->time_to_die;
 	pthread_create(&p->monitor, NULL, monitoring, arg);
+	pthread_detach(p->monitor);
 	while (p->n_eat-- != 0 && !p->setting->end_signal)
 	{
 		eat(p);

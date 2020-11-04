@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/06 12:57:37 by thomasgerma       #+#    #+#             */
-/*   Updated: 2020/11/01 16:15:28 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/11/04 05:38:36 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,7 @@
 # include <string.h>
 # include <sys/time.h>
 # include <limits.h>
-
-// Delete this
-# include <stdio.h>
-# include <errno.h>
+# include <fcntl.h>
 
 # define MISS_SETTINGS "Error: missing arguments\n"
 # define WRONG_ARGS "Error: wrong arguments\n"

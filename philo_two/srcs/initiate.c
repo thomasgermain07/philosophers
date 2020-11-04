@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/10 12:36:23 by thgermai          #+#    #+#             */
-/*   Updated: 2020/11/02 14:46:54 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/11/04 05:37:05 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ static int		initiate_philos(t_setting *setting,
 		if (!(philos[i].monitor_sem = create_sem(philos[i].monitor_name, 1)))
 			return (EXIT_FAILURE);
 		pthread_create(&philos[i].thread, NULL, start_routine, philos + i);
+		pthread_detach(philos[i].thread);
 		usleep(philos->setting->time_to_eat);
 	}
 	return (EXIT_SUCCESS);
@@ -67,8 +68,6 @@ static void		clean_mutex_thread(t_philo *philos)
 		if (philos[i].monitor_sem)
 			sem_unlink(philos[i].monitor_name);
 		free(philos[i].monitor_name);
-		pthread_detach(philos[i].monitor);
-		pthread_detach(philos[i].thread);
 	}
 	sem_unlink("/forks");
 	sem_unlink("/speaking");

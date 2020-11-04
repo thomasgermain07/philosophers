@@ -6,7 +6,7 @@
 /*   By: thgermai <thgermai@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/06 12:57:37 by thomasgerma       #+#    #+#             */
-/*   Updated: 2020/11/03 03:19:46 by thgermai         ###   ########.fr       */
+/*   Updated: 2020/11/04 05:38:27 by thgermai         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <sys/types.h>
 # include <signal.h>
 # include <limits.h>
+# include <fcntl.h>
 
 # define MISS_SETTINGS "Error: missing arguments\n"
 # define WRONG_ARGS "Error: wrong arguments\n"
